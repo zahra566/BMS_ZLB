@@ -1,0 +1,299 @@
+
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QObject, pyqtSlot
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+
+class Ui_Form(QWidget):
+    def setupUi(self, Form):
+        Form.setObjectName("Form")
+        Form.resize(700, 600)
+        self.le1 = QtWidgets.QLineEdit(Form)
+        self.le1.setGeometry(QtCore.QRect(54, 60, 400, 30))
+        self.le1.setObjectName("le1")
+        self.pb1 = QtWidgets.QPushButton(Form)
+        self.pb1.setGeometry(QtCore.QRect(476, 60, 200, 30))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.pb1.setFont(font)
+        self.pb1.setObjectName("pb1")
+        self.le2 = QtWidgets.QLineEdit(Form)
+        self.le2.setGeometry(QtCore.QRect(210, 150, 100, 30))
+        self.le2.setObjectName("le2")
+        self.lb = QtWidgets.QLabel(Form)
+        self.lb.setGeometry(QtCore.QRect(54, 150, 137, 30))
+        palette = QtGui.QPalette()
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
+        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
+        self.lb.setPalette(palette)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.lb.setFont(font)
+        self.lb.setObjectName("lb")
+        self.pb2 = QtWidgets.QPushButton(Form)
+        self.pb2.setGeometry(QtCore.QRect(256, 326, 197, 115))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.pb2.setFont(font)
+        self.pb2.setObjectName("pb2")
+        self.bg = QtWidgets.QLabel(Form)
+        self.bg.setGeometry(QtCore.QRect(0, 0, 700, 600))
+        palette = QtGui.QPalette()
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(85, 0, 127))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(85, 0, 127))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(85, 0, 127))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(85, 0, 127))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
+        self.bg.setPalette(palette)
+        self.bg.setAutoFillBackground(True)
+        self.bg.setText("")
+        self.bg.setObjectName("bg")
+        self.bg.raise_()
+        self.le1.raise_()
+        self.pb1.raise_()
+        self.le2.raise_()
+        self.lb.raise_()
+        self.pb2.raise_()
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+    #----------------------------------------------------Actions
+        self.pb1.clicked.connect(lambda: self.openFile())
+        self.pb2.clicked.connect(lambda : self.buildZL())
+
+    #----------------------------------------------------Functions
+    def openFile(self):
+        fname, selectedFilter = QFileDialog.getOpenFileName(self, 'Browse file',
+                                                            'I:\\python_stel\\Files',
+                                                            'Excel files (*.txt)')
+        self.le1.setText(fname)
+    #//////////////////////////////////////////////////////////////////
+    def buildZL(self):
+        stNum=self.le2.text()
+        path=self.le1.text()
+        fo = open('codesys.txt', 'w+')
+        fi = open(path, 'r+')
+        d1 = fi.readlines()
+        for line in d1:
+            if ('W' in line and 'INT' in line):
+                pass
+            else:
+                line=line.replace(' ','')
+                line=line.replace('\t','')
+                cline=line.split(':',1).pop()
+                line=line.replace(cline,'')
+                line=line.strip(':')
+                fo.write(line+'\n')
+        fo.close()
+        #-------------------------------------------------------
+        dict1={}
+        dict2={}
+        fo2=open('ZenonLogic.txt','w+')
+        fi2=open('codesys.txt','r+')
+        d2=fi2.readlines()
+        for x1 in d2:
+            x1=x1.split('AT%')
+            #print(x1)
+            if (len(x1)==1):
+                pass
+            else:
+                x2=[s.strip('\n') for s in x1]
+                x3=[s.strip('IW') for s in x2]
+                x4=[s.strip('QW') for s in x3]
+                #print(x2)
+                dict1.update({x4[0]:x4[1]})
+                dict2.update({x2[0]:x2[1]})
+        #print(dict1)
+        #print(dict2)
+        packW=[]
+        packI=[]
+        packQ=[]
+        packIW=[]
+        packQW=[]
+        packInum1=[]
+        packInum2=[]
+        packQnum1=[]
+        packQnum2=[]
+        for o,p in dict2.items():
+            if 'W' in p:
+                packW.append(o)
+            if 'I' in p:
+                packI.append(o)
+            if 'Q' in p:
+                packQ.append(o)
+        packIW=list(set(packW).intersection(packI))
+        packQW=list(set(packW).intersection(packQ))
+
+        for z in packIW:
+            for k,v in dict1.items():
+                if z in k:
+                    packInum1.append(2*int(v))
+                    packInum2.append(2*int(v)+1)
+        for z in packQW:
+            for k,v in dict1.items():
+                if z in k:
+                    packQnum1.append(2*int(v))
+                    packQnum2.append(2*int(v)+1)
+
+
+        for m in range(len(packIW)):
+            for g, h in dict2.items():
+                # print(pack)
+                if ('I' in h and str(packInum1[m]) in h):
+                    if h[-1] == '0':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.8;'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '1':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.9;'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '2':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.10;'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '3':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.11;'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '4':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.12;'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '5':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.13;'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '6':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.14;'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '7':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.15;'
+                        fo2.write(ss+'\n')
+                elif ('I' in h and str(packInum2[m]) in h):
+                    if h[-1] == '0':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.0;'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '1':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.1;'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '2':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.2;'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '3':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.3;'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '4':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.4;'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '5':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.5;'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '6':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.6;'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '7':
+                        ss = str(g) + ':=PLC' + stNum + '..' + packIW[m] + '.7;'
+                        fo2.write(ss+'\n')
+
+            # //////////////////////////////////////////////////////////////////
+        for m in range(len(packQW)):
+            for g, h in dict2.items():
+                # print(pack)
+                if ('Q' in h and str(packQnum1[m]) in h):
+                    if h[-1] == '0':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.8:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '1':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.9:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '2':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.10:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '3':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.11:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '4':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.12:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '5':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.13:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '6':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.14:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '7':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.15:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                elif ('Q' in h and str(packQnum2[m])in h):
+                    if h[-1] == '0':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.0:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '1':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.1:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '2':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.2:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '3':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.3:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '4':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.4:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '5':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.5:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '6':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.6:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+                    elif h[-1] == '7':
+                        ss = 'PLC' + stNum + '..' + packQW[m] + '.7:=' + str(g) + ';'
+                        fo2.write(ss+'\n')
+        fo2.close()
+
+            #//////////////////////////////////////////////////////////////////
+
+
+    def retranslateUi(self, Form):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "BMS Zenon Logic Builder"))
+        self.pb1.setText(_translate("Form", "Browse your file"))
+        self.lb.setText(_translate("Form", "Station Number:"))
+        self.pb2.setText(_translate("Form", "Build Zenon Logic Code"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Form = QtWidgets.QWidget()
+    ui = Ui_Form()
+    ui.setupUi(Form)
+    Form.show()
+    sys.exit(app.exec_())
+
